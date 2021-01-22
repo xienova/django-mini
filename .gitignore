@@ -1,0 +1,5 @@
+# here is commet
+
+# ignore target folder
+.idea/
+__pycache__/
