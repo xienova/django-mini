@@ -1,19 +1,54 @@
 <!-- 定义导航栏 -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
+    <div class="container">
 
-    <!-- 导航栏商标 -->
-    <a class="navbar-brand" href="#">我的博客</a>
+        <!-- 导航栏商标 -->
+        <a class="navbar-brand" href="#">我的博客</a>
 
-    <!-- 导航入口 -->
-    <div>
-      <ul class="navbar-nav">
-        <!-- 条目 -->
-        <li class="nav-item">
-          <a class="nav-link" href="#">文章</a>
-        </li>
-      </ul>
+        <!-- 导航入口 -->
+        <div>
+            <ul class="navbar-nav">
+                <!-- 条目 -->
+                <li class="nav-item">
+                    {% if request.session.is_login %}
+                        <li><a class="nav-link" href="#">欢迎，{{ request.session.user_name }}
+                            {{ request.session.user_id }}</a></li>
+                        <li><a class="nav-link" href="/logout/">登出</a></li>
+                    {% else %}
+                        <li><a class="nav-link" href="/login/">登录</a></li>
+                        <li><a class="nav-link" href="/register/">注册</a></li>
+                    {% endif %}
+{#                <a class="nav-link" href="#">文章</a>#}
+
+
+                </li>
+            </ul>
+        </div>
+
     </div>
-
-  </div>
 </nav>
+
+{#<nav class="navbar navbar-inverse navbar-fixed-top">#}
+{#      <div class="container-fluid">#}
+{#        <div class="navbar-header">#}
+{#          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">#}
+{#            <span class="sr-only">Toggle navigation</span>#}
+{#            <span class="icon-bar"></span>#}
+{#            <span class="icon-bar"></span>#}
+{#            <span class="icon-bar"></span>#}
+{#          </button>#}
+{#          <a class="navbar-brand" href="#">图书馆借阅系统</a>#}
+{#        </div>#}
+{#        <div id="navbar" class="navbar-collapse collapse">#}
+{#          <ul class="nav navbar-nav navbar-right">#}
+{#              {% if request.session.is_login %}#}
+{#                  <li><a href="#">欢迎，{{ request.session.user_name }} {{ request.session.user_id }}</a></li>#}
+{#                  <li><a href="/logout/">登出</a></li>#}
+{#              {% else %}#}
+{#                  <li><a href="/login/">登录</a></li>#}
+{#                  <li><a href="/register/">注册</a></li>#}
+{#              {% endif %}#}
+{#          </ul>#}
+{#        </div>#}
+{#      </div>#}
+{#    </nav>#}

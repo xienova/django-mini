@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 
 from .models import Dep, User
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
 
 
 # Create your views here.
@@ -34,8 +34,8 @@ def user_login(request):
     :return:
     '''
     if request.method == "GET":
-        # if request.session.get('is_login', None):  # 如果没有获取到is_login的值，则默认为None
-        #     return redirect('account:login')  # 跳转到登录界面
+        if request.session.get('is_login', None):   # 如果没有is_login，则设为None; 有的话就获得它
+            return redirect('account:home')
         login_form = LoginForm()
         return render(request, 'account/login.html', locals())
 
@@ -59,6 +59,30 @@ def user_login(request):
         return render(request, 'account/login.html',locals())
 
 
+def user_register(request):
+    '''
+    注册
+    :param request:
+    :return:
+    '''
+    if request.method == "GET":
+        register_form = RegisterForm()
+        return render(request, 'account/register.html', locals())
+
+    if request.method == "POST":
+        register_form = RegisterForm(request.POST)
+        if register_form.is_valid():
+            password1 = register_form.cleaned_data['password1']
+            password2 = register_form.cleaned_data['password2']
+            if password1 == password2:
+                new_user = register_form.save(commit=False)
+                new_user.password = password1
+                new_user.save()
+                return redirect("account:login")
+            else:
+                messages = "两次输入的密码不一致"
+        return render(request, 'account/register.html', locals())
+
 def home(request):
     if request.method == "GET":
         if not request.session.get('is_login', None):
@@ -66,3 +90,5 @@ def home(request):
             return redirect('account:login')
         user_name = request.session['name']
         return render(request, 'account/home.html',locals())    # 定义的所有变量
+
+

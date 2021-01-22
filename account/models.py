@@ -20,7 +20,7 @@ class Dep(models.Model):
 class User(models.Model):
     dep = models.ForeignKey(Dep, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=150, unique=True)  # 拼音
-    display_name = models.CharField(max_length=150, unique=True)  # 汉字
+    display_name = models.CharField(max_length=150)  # 汉字
     password = models.CharField(max_length=128, default=000)
     email = models.EmailField()
     is_active = models.BooleanField(default=True)  # 是否仍在海信
