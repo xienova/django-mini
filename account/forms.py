@@ -4,6 +4,9 @@ __date__ = '2021/1/21 13:58'
 # 引入表单类
 from django import forms
 
+# 在ModelForm中有插件名widgets，所以这里引入插件时要取别名，否则报错
+from django.forms import widgets as Fwidgets
+
 from .views import User
 
 class LoginForm(forms.Form):
@@ -23,4 +26,12 @@ class RegisterForm(forms.ModelForm):
             'email': '邮箱',
             'dep': '小组',
             'is_hisense': '是否海信',
+        }
+        widgets = {
+            'name': Fwidgets.TextInput(attrs={'class': 'form-control', }),
+            'display_name': Fwidgets.TextInput(attrs={'class': 'form-control', }),
+            'email': Fwidgets.EmailInput(attrs={'class': 'form-control', }),
+            'dep': Fwidgets.Select(attrs={'class': 'form-control', }),
+            'is_hisense': Fwidgets.CheckboxInput,
+
         }

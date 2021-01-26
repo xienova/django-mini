@@ -71,6 +71,7 @@ def user_register(request):
 
     if request.method == "POST":
         register_form = RegisterForm(request.POST)
+        message = '请检查填写的内容！'
         if register_form.is_valid():
             password1 = register_form.cleaned_data['password1']
             password2 = register_form.cleaned_data['password2']
@@ -80,8 +81,8 @@ def user_register(request):
                 new_user.save()
                 return redirect("account:login")
             else:
-                messages = "两次输入的密码不一致"
-        return render(request, 'account/register.html', locals())
+                message = "两次输入的密码不一致"
+        return render(request, 'account/register.html', locals())   # 当提交数据出错时，使用
 
 def home(request):
     if request.method == "GET":
