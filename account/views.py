@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 
 from .models import Dep, User
+from phone.models import Log    # 日志
 from .forms import LoginForm, RegisterForm
 
 
@@ -24,7 +25,7 @@ def dep_list(request):
     # 需要传递给模板 templates 的对象
     context = {'deps': deps}
     # render函数：载入模板，并返回context对象
-    return render(request, 'account/account_list.html', context)
+    return render(request, 'account/account_list_bootstrap3.html', context)
 
 
 def user_login(request):
@@ -34,10 +35,11 @@ def user_login(request):
     :return:
     '''
     if request.method == "GET":
-        if request.session.get('is_login', None):   # 如果没有is_login，则设为None; 有的话就获得它
+        if request.session.get('is_login'):  # 如果is_login不存在，返回None
             return redirect('account:home')
         login_form = LoginForm()
-        return render(request, 'account/login.html', locals())
+        # return render(request, 'account/login_bootstrap3.html', locals())
+        return render(request, 'account/starter.html', locals())
 
     if request.method == "POST":
         login_form = LoginForm(request.POST)
@@ -45,10 +47,12 @@ def user_login(request):
             # .cleaned_data 清洗出合法数据
             name = login_form.cleaned_data['name']
             password = login_form.cleaned_data['password']
-            user = User.objects.filter(name=name).first()   # 返回filter后的第一个
+            user = User.objects.filter(name=name).first()  # 返回filter后的第一个
             if user and user.password == password:
                 request.session['is_login'] = True
-                request.session['name'] = user.display_name
+                request.session['name'] = user.id
+                request.session['display_name'] = user.display_name
+                Log.objects.create(user_id = user.id, action='登录')
                 return redirect('account:home')
             else:
                 message = '用户名或密码错误！'
@@ -56,7 +60,21 @@ def user_login(request):
             # 如果均匹配则返回这个 user 对象
         else:
             return HttpResponse("不合法")
-        return render(request, 'account/login.html',locals())
+        return render(request, 'account/login_bootstrap3.html', locals())
+
+
+def user_logout(request):
+    '''
+    用户登出
+    :param request:
+    :return:
+    '''
+    if request.method == "GET":
+        if request.session.get('is_login'):
+            Log.objects.create(user_id = request.session['name'], action= '登出' )
+            request.session.flush()
+            messages.success(request, '登出成功！')
+        return redirect('account:login')
 
 
 def user_register(request):
@@ -67,7 +85,7 @@ def user_register(request):
     '''
     if request.method == "GET":
         register_form = RegisterForm()
-        return render(request, 'account/register.html', locals())
+        return render(request, 'account/register_bootstrap3.html', locals())
 
     if request.method == "POST":
         register_form = RegisterForm(request.POST)
@@ -82,7 +100,8 @@ def user_register(request):
                 return redirect("account:login")
             else:
                 message = "两次输入的密码不一致"
-        return render(request, 'account/register.html', locals())   # 当提交数据出错时，使用
+        return render(request, 'account/register_bootstrap3.html', locals())  # 当提交数据出错时，使用
+
 
 def home(request):
     if request.method == "GET":
@@ -90,6 +109,4 @@ def home(request):
             messages.error(request, '请先登录！')
             return redirect('account:login')
         user_name = request.session['name']
-        return render(request, 'account/home.html',locals())    # 定义的所有变量
-
-
+        return render(request, 'account/home_bootstrap3.html', locals())  # 定义的所有变量

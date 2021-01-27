@@ -6,6 +6,7 @@ from django.db import models
 
 class Dep(models.Model):
     name = models.CharField(max_length=20, unique=True)
+    is_super = models.BooleanField(null=True)  # 是否是管理员，即可以导入样机信息，主管组有此权限
 
     # 函数 __str__ 定义当调用对象的 str() 方法时的返回值内容
     def __str__(self):
