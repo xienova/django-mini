@@ -35,11 +35,10 @@ def user_login(request):
     :return:
     '''
     if request.method == "GET":
-        if request.session.get('is_login'):  # 如果is_login不存在，返回None
+        if request.session.get('is_login'):  # 如果is_login存在，说明已经登陆，直接跳转到主页
             return redirect('account:home')
         login_form = LoginForm()
-        # return render(request, 'account/login_bootstrap3.html', locals())
-        return render(request, 'account/starter.html', locals())
+        return render(request, 'account/login_bootstrap3.html', locals())
 
     if request.method == "POST":
         login_form = LoginForm(request.POST)
@@ -50,7 +49,7 @@ def user_login(request):
             user = User.objects.filter(name=name).first()  # 返回filter后的第一个
             if user and user.password == password:
                 request.session['is_login'] = True
-                request.session['name'] = user.id
+                request.session['id'] = user.id   # id 展示的是ID，主键
                 request.session['display_name'] = user.display_name
                 Log.objects.create(user_id = user.id, action='登录')
                 return redirect('account:home')
@@ -71,7 +70,7 @@ def user_logout(request):
     '''
     if request.method == "GET":
         if request.session.get('is_login'):
-            Log.objects.create(user_id = request.session['name'], action= '登出' )
+            Log.objects.create(user_id = request.session['id'], action= '登出' )
             request.session.flush()
             messages.success(request, '登出成功！')
         return redirect('account:login')
@@ -103,10 +102,15 @@ def user_register(request):
         return render(request, 'account/register_bootstrap3.html', locals())  # 当提交数据出错时，使用
 
 
-def home(request):
+def myphone(request):
+    '''
+    登录后首先展示的页面，我的样机
+    :param request:
+    :return:
+    '''
     if request.method == "GET":
         if not request.session.get('is_login', None):
             messages.error(request, '请先登录！')
             return redirect('account:login')
-        user_name = request.session['name']
-        return render(request, 'account/home_bootstrap3.html', locals())  # 定义的所有变量
+        user_name = request.session['display_name'] # 展示的中文名字
+        return render(request, 'account/account_myphone.html', locals())  # 定义的所有变量

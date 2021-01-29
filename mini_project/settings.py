@@ -117,7 +117,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False  # 因数据库中用的时区为 0 时区，此处与其对应；
 
 
 # Static files (CSS, JavaScript, Images)
