@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 
-from .models import Dep, User
+from account.models import Dep, User
 from phone.models import Log    # 日志
-from .forms import LoginForm, RegisterForm
+from account.forms import LoginForm, RegisterForm
 
 
 # Create your views here.

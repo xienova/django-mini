@@ -14,24 +14,24 @@ class PhoneDep(models.Model):
 
 
 class Phone(models.Model):
-    dep = models.ForeignKey(PhoneDep, on_delete=models.SET_NULL, null=True)  # 样机所属小组
-    creater = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)  # 创建人
+    phone_dep = models.ForeignKey(PhoneDep, on_delete=models.SET_NULL, null=True, related_name='phone')  # 样机所属小组
+    creater = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='phone')  # 创建人
     IMEI = models.CharField(max_length=150)  # IMEI号编码
     name = models.CharField(max_length=150)  # 名称
     stage = models.CharField(max_length=128, default=000)  # 样机阶段
     num = models.CharField(max_length=150)  # 样机编号
-    note = models.CharField(max_length=200, blank = True, null= True)  # 备注 可空
+    note = models.CharField(max_length=200, blank=True, null=True)  # 备注 可空
     is_display = models.BooleanField(default=True)  # 是否显示
     birthday = models.CharField(max_length=50)  # 创建日期
     is_borrow = models.BooleanField(default=False)  # 是否借出到同事手中；默认为否
 
     def __str__(self):
-        return self.name + self.stage + self.num  # 返回样机名称阶段编号
+        return self.name  # 返回样机名称阶段编号
 
 
 class Borrow(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)  # 使用人
-    phone = models.ForeignKey(Phone, on_delete=models.SET_NULL, null=True)  # 样机
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='borrow')  # 使用人
+    phone = models.ForeignKey(Phone, on_delete=models.SET_NULL, null=True, related_name='borrow')  # 样机
     borrow_date = models.DateTimeField(auto_now_add=True)  # 借出日期
     return_date = models.DateTimeField(auto_now=True)  # 归还日期
     test = models.CharField(max_length=200)  # 进行的测试

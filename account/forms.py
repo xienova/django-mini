@@ -7,7 +7,7 @@ from django import forms
 # 在ModelForm中有插件名widgets，所以这里引入插件时要取别名，否则报错
 from django.forms import widgets as Fwidgets
 
-from .views import User
+from account.models import User
 
 class LoginForm(forms.Form):
     name = forms.CharField(label="邮箱前缀", widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -33,5 +33,4 @@ class RegisterForm(forms.ModelForm):
             'email': Fwidgets.EmailInput(attrs={'class': 'form-control', }),
             'dep': Fwidgets.Select(attrs={'class': 'form-control', }),
             'is_hisense': Fwidgets.CheckboxInput,
-
         }
