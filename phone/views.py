@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views import View
+from django.http import JsonResponse,HttpResponse
 from django.views.generic import ListView
 from django.db.models import Q
+from django.forms.models import model_to_dict
 
 from phone.models import Phone  # 引入样机类
 from phone.forms import SearchForm
@@ -19,9 +21,11 @@ from phone.forms import SearchForm
 
 
 class PhoneListView(View):
+    '''
     # model = Phone   # 得到Phone表的所有内容，相当于执行 Phone.objects.all()
     # context_object_name = "phones"  # 传入模板中的变量名称，若不写此名，默认为 object
     # template_name = 'phone/phone_borrow.html'       # 使用的html文件
+    '''
     def get(self, request):
         search_form = SearchForm()
         phones = Phone.objects.all()
@@ -56,3 +60,20 @@ class PhoneListView(View):
             return render(request, "phone/phone_borrow.html", {"phones": phones,"form":search_form})
         else:
             print(search_form.errors)
+
+
+class PhoneInputView(View):
+    '''
+
+    '''
+    def get(self, request):
+        return render(request, "phone/phone_input.html")
+
+
+def data_phone_input(request):
+    '''
+    尝试JSON数据
+    '''
+    if request.method == 'GET':
+        phones = Phone.objects.all().values_list()
+        return JsonResponse(list(phones),safe=False)

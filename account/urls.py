@@ -3,16 +3,16 @@ __date__ = '2021/1/20 9:56'
 
 from django.urls import path
 
-from . import views                 # 导入同目录下的views.py
+from account.views import *                 # 导入同目录下的views.py
 
 app_name = 'account'
 
 urlpatterns = [
-    path('dep_list', views.dep_list, name='dep_list'),
-    path('login', views.user_login, name = 'login'),
-    path('logout', views.user_logout, name = 'logout'),
-    path('home', views.myphone, name = 'home'),
-    path('register', views.user_register, name = 'register'),
+    path('dep_list/', dep_list, name='dep_list'),
+    path('login/', user_login, name = 'login'),
+    path('logout/', user_logout, name = 'logout'),
+    path('home/', myphone, name = 'home'),
+    path('register/', user_register, name = 'register'),
 ]
 
 

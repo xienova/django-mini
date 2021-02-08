@@ -69,7 +69,7 @@
                             借出
                             {% endif %}
                         </td>
-                        <td>{{ phone.phone_dep}}</td>
+                        <td>{{ phone.creater}}</td>
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -90,6 +90,16 @@
 <script>
      $(document).ready(function() {
     var table = $('#example').DataTable({
+<!--                 //这样配置后，即可用DT的API来访问表格数据-->
+            columns: [
+                {data: "IMEI号"},
+                {data: "样机名称"},
+                {data: "样机阶段"},
+                {data: "样机编号"},
+                {data: "备注"},
+                {data: "样机状态"},
+                {data: "所在小组"},
+            ]
     });
     table.select.style( 'os' );
     $('#example tbody').on( 'click', 'tr', function () {
@@ -97,7 +107,9 @@
     } );
 
     $('#button').click( function () {
-        alert( table.rows('.selected').data()[0]);
+        var rowData = table.row('.selected').data();
+        console.log(rowData);
+        alert( "第一列内容："+rowData.IMEI号 );
     } );
 
       });

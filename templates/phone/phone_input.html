@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}样机信息修改{% endblock %}
+
+<!--{% block myinf_menu-open %}menu-open{% endblock %}-->
+
+
+{% block head %}样机信息修改{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-info">
+            <div class="card-header">
+                <h3 class="card-title">
+                    样机信息
+                    <i class="nav-icon fas fa-question-circle" data-container="body" data-toggle="popover"
+                       data-placement="right" data-content="待定">
+                    </i>
+                </h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body ">
+                <table class="table table-bordered table-hover " id="example">
+                    <thead>
+                    <tr>
+                        <th>a</th>
+                        <th>b</th>
+                        <th>c</th>
+                        <th>d</th>
+                        <th>e</th>
+                        <th>f</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+     $(document).ready(function() {
+        $('#example').DataTable({
+            ajax :{
+                    url:'http://127.0.0.1:8000/phone/data_phone_input',
+                    dataSrc: 'xx'
+            },
+            columns:[
+                { data: 'name' },
+                { data: 'position' },
+                { data: 'salary' },
+                { data: 'start_date' },
+                { data: 'office' },
+                { data: 'extn' }
+            ]
+        });
+      });
+
+</script>
+{% endblock %}

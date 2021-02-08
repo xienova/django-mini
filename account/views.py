@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.http import HttpResponse
 from django.contrib import messages
 
@@ -16,7 +17,7 @@ def index(request):
     :return:
     '''
     if request.method == "GET":
-        return redirect('account:login')  # 跳转到登录界面
+        return redirect(reverse('account:login'))  # 跳转到登录界面
 
 
 def dep_list(request):
@@ -36,7 +37,7 @@ def user_login(request):
     '''
     if request.method == "GET":
         if request.session.get('is_login'):  # 如果is_login存在，说明已经登陆，直接跳转到主页
-            return redirect('account:home')
+            return redirect(reverse('account:home'))
         login_form = LoginForm()
         return render(request, 'account/login_bootstrap3.html', locals())
 
@@ -52,7 +53,7 @@ def user_login(request):
                 request.session['id'] = user.id   # id 展示的是ID，主键
                 request.session['display_name'] = user.display_name
                 Log.objects.create(user_id = user.id, action='登录')
-                return redirect('account:home')
+                return redirect(reverse('account:home'))
             else:
                 message = '用户名或密码错误！'
             # 检验账号、密码是否正确匹配数据库中的某个用户
@@ -73,7 +74,7 @@ def user_logout(request):
             Log.objects.create(user_id = request.session['id'], action= '登出' )
             request.session.flush()
             messages.success(request, '登出成功！')
-        return redirect('account:login')
+        return redirect(reverse('account:login'))
 
 
 def user_register(request):
@@ -96,7 +97,7 @@ def user_register(request):
                 new_user = register_form.save(commit=False)
                 new_user.password = password1
                 new_user.save()
-                return redirect("account:login")
+                return redirect(reverse("account:login"))
             else:
                 message = "两次输入的密码不一致"
         return render(request, 'account/register_bootstrap3.html', locals())  # 当提交数据出错时，使用
@@ -111,6 +112,6 @@ def myphone(request):
     if request.method == "GET":
         if not request.session.get('is_login', None):
             messages.error(request, '请先登录！')
-            return redirect('account:login')
+            return redirect(reverse('account:login'))
         user_name = request.session['display_name'] # 展示的中文名字
         return render(request, 'account/account_myphone.html', locals())  # 定义的所有变量
