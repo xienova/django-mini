@@ -11,6 +11,7 @@
 
 {% block content %}
 
+<button onclick="hidecolumn();">隐藏第一列</button>
 <div class="row">
     <div class="col-12">
         <div class="card card-info">
@@ -34,12 +35,14 @@
                 <table class="table table-bordered table-hover " id="example">
                     <thead>
                     <tr>
-                        <th>a</th>
-                        <th>b</th>
-                        <th>c</th>
-                        <th>d</th>
-                        <th>e</th>
-                        <th>f</th>
+                        <th>id</th>
+                        <th>IMEI号</th>
+                        <th>样机名称</th>
+                        <th>样机阶段</th>
+                        <th>样机编号</th>
+                        <th>备注</th>
+                        <th>样机状态</th>
+                        <th>所在小组</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -55,24 +58,34 @@
 
 {% endblock %}
 
+
 {% block javascript %}
 <script>
+
+     function hidecolumn() {
+        $('#example tr').find('td:eq(0)').hide();
+         $('#example tr').find('th:eq(0)').hide();
+        }
+
      $(document).ready(function() {
         $('#example').DataTable({
             ajax :{
                     url:'http://127.0.0.1:8000/phone/data_phone_input',
-                    dataSrc: 'xx'
+                    dataSrc: ''
             },
             columns:[
-                { data: 'name' },
-                { data: 'position' },
-                { data: 'salary' },
-                { data: 'start_date' },
-                { data: 'office' },
-                { data: 'extn' }
+                {data: "id"},
+                {data: "IMEI"},
+                {data: "name"},
+                {data: "stage"},
+                {data: "num"},
+                {data: "note"},
+                {data: "is_borrow"},
+                {data: "phone_dep_id"},
             ]
         });
       });
+
 
 </script>
 {% endblock %}

@@ -67,7 +67,7 @@ class PhoneInputView(View):
 
     '''
     def get(self, request):
-        return render(request, "phone/phone_input.html")
+        return render(request, "phone/phone_input_ajax.html")
 
 
 def data_phone_input(request):
@@ -75,5 +75,5 @@ def data_phone_input(request):
     尝试JSON数据
     '''
     if request.method == 'GET':
-        phones = Phone.objects.all().values_list()
+        phones = Phone.objects.values()
         return JsonResponse(list(phones),safe=False)

@@ -69,17 +69,14 @@
                             借出
                             {% endif %}
                         </td>
-                        <td>{{ phone.creater}}</td>
+                        <td>{{ phone.phone_dep}}</td>
                     </tr>
                     {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
-
     </div>
-
-
 </div>
 
 <button id="button">按钮</button>
@@ -89,31 +86,28 @@
 {% block javascript %}
 <script>
      $(document).ready(function() {
-    var table = $('#example').DataTable({
-<!--                 //这样配置后，即可用DT的API来访问表格数据-->
+        var table = $('#example').DataTable({
+<!--            已有dom数据，对其重命名-->
             columns: [
-                {data: "IMEI号"},
-                {data: "样机名称"},
-                {data: "样机阶段"},
-                {data: "样机编号"},
-                {data: "备注"},
-                {data: "样机状态"},
-                {data: "所在小组"},
+                {data: "IMEI"},
+                {data: "name"},
+                {data: "stage"},
+                {data: "num"},
+                {data: "note"},
+                {data: "is_borrow"},
+                {data: "phone_dep_id"},
             ]
-    });
-    table.select.style( 'os' );
-    $('#example tbody').on( 'click', 'tr', function () {
-        $(this).toggleClass('selected');
-    } );
-
-    $('#button').click( function () {
-        var rowData = table.row('.selected').data();
-        console.log(rowData);
-        alert( "第一列内容："+rowData.IMEI号 );
-    } );
-
-      });
-
+        });
+        table.select.style( 'os' );
+        $('#example tbody').on( 'click', 'tr', function () {
+            $(this).toggleClass('selected');
+        });
+        $('#button').click( function () {
+            var rowData = table.row('.selected').data();
+            console.log(rowData);
+            alert( "第一列内容："+rowData.phone_dep_id );
+        });
+     });
 
 </script>
 {% endblock %}

@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}样机信息修改{% endblock %}
+
+<!--{% block myinf_menu-open %}menu-open{% endblock %}-->
+
+
+{% block head %}样机信息修改{% endblock %}
+
+{% block content %}
+
+<button id="button">显示选择行信息</button>
+<div class="row">
+    <div class="col-12">
+        <div class="card card-info">
+            <div class="card-header">
+                <h3 class="card-title">
+                    样机信息
+                    <i class="nav-icon fas fa-question-circle" data-container="body" data-toggle="popover"
+                       data-placement="right" data-content="待定">
+                    </i>
+                </h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body ">
+                <table class="table table-bordered table-hover " id="example">
+                    <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>IMEI号</th>
+                        <th>样机名称</th>
+                        <th>样机阶段</th>
+                        <th>样机编号</th>
+                        <th>备注</th>
+                        <th>是否借出</th>
+                        <th>所在小组</th>
+                    </tr>
+                    </thead>
+<!--                    <tfoot>-->
+<!--                    <tr>-->
+<!--                        <th>id</th>-->
+<!--                        <th>IMEI号</th>-->
+<!--                        <th>样机名称</th>-->
+<!--                        <th>样机阶段</th>-->
+<!--                        <th>样机编号</th>-->
+<!--                        <th>备注</th>-->
+<!--                        <th>样机状态</th>-->
+<!--                        <th>所在小组</th>-->
+<!--                    </tr>-->
+<!--                    </tfoot>-->
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+
+{% block javascript %}
+<script>
+     function hidecolumn() {
+        $('#example tr').find('td:eq(0)').hide();
+         $('#example tr').find('th:eq(0)').hide();
+        }
+
+     $(document).ready(function() {
+<!--     datatables数据初始化-->
+        var table = $('#example').DataTable({
+            dom:"<'searchBox' l>ftip",
+            ordering:  false,
+
+            ajax :{
+                    url:'http://127.0.0.1:8000/phone/data_phone_input',
+                    dataSrc: ''
+            },
+            columns:[
+                {data: "id"},
+                {data: "IMEI"},
+                {data: "name"},
+                {data: "stage"},
+                {data: "num"},
+                {data: "note"},
+                {data: "is_borrow",
+                 render:function(data,type,row){
+                    if (data=='True')
+                    {return '借出'}
+                    else
+                    {return '在库'}
+                 }
+                },
+                {data: "phone_dep_id"},
+            ],
+            initComplete: function () {
+                $("div.searchBox").append("将所选样机小组更新:<select><option></option><option>手机自动化测试室</option><option>手机专项测试室</option><option>手机应用测试室</option><option>手机整机测试室</option><option>手机硬件测试室</option><option>运营商认证测试室</option><option>项目经理</option><option>ODM</option></select>");
+                $("div.searchBox").append("<button onclick='hidecolumn();'>查询</button>");
+
+                var api = this.api();
+                api.columns().indexes().flatten().each( function ( i ) {
+                    var column = api.column( i );
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo( $(column.header()) )
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+                            column
+                                .search( val ? '^'+val+'$' : '', true, false )
+                                .draw();
+                        } );
+                        column.data().unique().sort().each( function ( d, j ) {
+                            select.append( '<option value="'+d+'">'+d+'</option>' )
+                        } );
+                } );
+            }
+        });
+<!--   初始化后，获取选中行的数据信息-->
+         table.select.style( 'os' );
+         $('#example tbody').on( 'click', 'tr', function () {
+            $(this).toggleClass('selected');
+        });
+        $('#button').click( function () {
+            var rowData = table.row('.selected').data();
+            console.log(rowData);
+            alert( "第一列内容："+rowData.phone_dep_id );
+        });
+
+      });
+</script>
+{% endblock %}
