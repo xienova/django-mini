@@ -73,6 +73,7 @@
 
 {% block javascript %}
 <script>
+    <!--隐藏首列-->
      function hidecolumn() {
         $('#example tr').find('td:eq(0)').hide();
          $('#example tr').find('th:eq(0)').hide();
@@ -103,11 +104,11 @@
                     {return '在库'}
                  }
                 },
-                {data: "phone_dep_id"},
+                {data: "phone_dep__name"},
             ],
             initComplete: function () {
                 $("div.searchBox").append("将所选样机小组更新:<select><option></option><option>手机自动化测试室</option><option>手机专项测试室</option><option>手机应用测试室</option><option>手机整机测试室</option><option>手机硬件测试室</option><option>运营商认证测试室</option><option>项目经理</option><option>ODM</option></select>");
-                $("div.searchBox").append("<button onclick='hidecolumn();'>查询</button>");
+                $("div.searchBox").append("<button onclick='hidecolumn();'>隐藏</button>");
 
                 var api = this.api();
                 api.columns().indexes().flatten().each( function ( i ) {
@@ -134,9 +135,9 @@
             $(this).toggleClass('selected');
         });
         $('#button').click( function () {
-            var rowData = table.row('.selected').data();
-            console.log(rowData);
-            alert( "第一列内容："+rowData.phone_dep_id );
+            var rowData = table.rows('.selected').data();
+<!--            console.log(rowData);-->
+            alert( "第一列内容："+rowData.id );
         });
 
       });
