@@ -45,18 +45,18 @@
                         <th>所在小组</th>
                     </tr>
                     </thead>
-<!--                    <tfoot>-->
-<!--                    <tr>-->
-<!--                        <th>id</th>-->
-<!--                        <th>IMEI号</th>-->
-<!--                        <th>样机名称</th>-->
-<!--                        <th>样机阶段</th>-->
-<!--                        <th>样机编号</th>-->
-<!--                        <th>备注</th>-->
-<!--                        <th>样机状态</th>-->
-<!--                        <th>所在小组</th>-->
-<!--                    </tr>-->
-<!--                    </tfoot>-->
+                    <!--                    <tfoot>-->
+                    <!--                    <tr>-->
+                    <!--                        <th>id</th>-->
+                    <!--                        <th>IMEI号</th>-->
+                    <!--                        <th>样机名称</th>-->
+                    <!--                        <th>样机阶段</th>-->
+                    <!--                        <th>样机编号</th>-->
+                    <!--                        <th>备注</th>-->
+                    <!--                        <th>样机状态</th>-->
+                    <!--                        <th>所在小组</th>-->
+                    <!--                    </tr>-->
+                    <!--                    </tfoot>-->
                     <tbody>
                     </tbody>
                 </table>
@@ -77,18 +77,23 @@
      function hidecolumn() {
         $('#example tr').find('td:eq(0)').hide();
          $('#example tr').find('th:eq(0)').hide();
-        }
+     }
 
      $(document).ready(function() {
-<!--     datatables数据初始化-->
+
+        <!--     datatables数据初始化-->
         var table = $('#example').DataTable({
             dom:"<'searchBox' l>ftip",
+
+            select:true,
+
             ordering:  false,
 
             ajax :{
                     url:'http://127.0.0.1:8000/phone/data_phone_input',
                     dataSrc: ''
             },
+
             columns:[
                 {data: "id"},
                 {data: "IMEI"},
@@ -106,6 +111,8 @@
                 },
                 {data: "phone_dep__name"},
             ],
+
+            <!--            列筛选功能实现-->
             initComplete: function () {
                 $("div.searchBox").append("将所选样机小组更新:<select><option></option><option>手机自动化测试室</option><option>手机专项测试室</option><option>手机应用测试室</option><option>手机整机测试室</option><option>手机硬件测试室</option><option>运营商认证测试室</option><option>项目经理</option><option>ODM</option></select>");
                 $("div.searchBox").append("<button onclick='hidecolumn();'>隐藏</button>");
@@ -129,17 +136,25 @@
                 } );
             }
         });
-<!--   初始化后，获取选中行的数据信息-->
-         table.select.style( 'os' );
-         $('#example tbody').on( 'click', 'tr', function () {
-            $(this).toggleClass('selected');
-        });
+
+        <!--   初始化后，获取选中行的数据信息-->
         $('#button').click( function () {
-            var rowData = table.rows('.selected').data();
-<!--            console.log(rowData);-->
-            alert( "第一列内容："+rowData.id );
+            var rowData1 = table.rows({ selected: true }).data();
+            var count = table.rows({selected:true}).count();
+
+            $.ajax({
+                url: '{% url "phone:data_phone_input"%}',
+                type: 'POST',
+                data: {'count':count},
+                success: function(e){
+
+                }
+
+            });
         });
 
-      });
+     });
+
+
 </script>
 {% endblock %}

@@ -71,6 +71,9 @@ class PhoneInputView(View):
     def get(self, request):
         return render(request, "phone/phone_input_ajax.html")
 
+    def post(self,request):
+        pass
+
 
 def data_phone_input(request):
     '''
