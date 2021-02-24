@@ -9,17 +9,6 @@ from phone.models import Phone  # 引入样机类
 from phone.forms import SearchForm
 
 
-# Create your views here.
-
-
-# class SearchView(View):
-#     '''
-#     查询有什么书
-#     '''
-#     def get(self,request):
-#         pass
-
-
 class PhoneListView(View):
     '''
     # model = Phone   # 得到Phone表的所有内容，相当于执行 Phone.objects.all()
@@ -65,14 +54,14 @@ class PhoneListView(View):
 
 class PhoneInputView(View):
     '''
-
+    样机信息输入
     '''
 
     def get(self, request):
         return render(request, "phone/phone_input_ajax.html")
 
     def post(self,request):
-        pass
+        return HttpResponse("233")
 
 
 def data_phone_input(request):
@@ -81,5 +70,4 @@ def data_phone_input(request):
     '''
     if request.method == 'GET':
         phones = Phone.objects.values('id', 'IMEI', 'name', 'stage', 'num', 'note', 'is_borrow', 'phone_dep__name')
-        # phones = Phone.objects.values()
-        return JsonResponse(list(phones), safe=False)
+        return JsonResponse(list(phones), safe=False)       # 将queryset变为可以Json化的list后再操作

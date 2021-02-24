@@ -12,6 +12,7 @@
 {% block content %}
 
 <button id="button">显示选择行信息</button>
+
 <div class="row">
     <div class="col-12">
         <div class="card card-info">
@@ -79,6 +80,39 @@
          $('#example tr').find('th:eq(0)').hide();
      }
 
+    /* 以下 ajax 获取csrftoken相关 */
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+    /* 以上 ajax 获取csrftoken相关 */
+
      $(document).ready(function() {
 
         <!--     datatables数据初始化-->
@@ -116,7 +150,6 @@
             initComplete: function () {
                 $("div.searchBox").append("将所选样机小组更新:<select><option></option><option>手机自动化测试室</option><option>手机专项测试室</option><option>手机应用测试室</option><option>手机整机测试室</option><option>手机硬件测试室</option><option>运营商认证测试室</option><option>项目经理</option><option>ODM</option></select>");
                 $("div.searchBox").append("<button onclick='hidecolumn();'>隐藏</button>");
-
                 var api = this.api();
                 api.columns().indexes().flatten().each( function ( i ) {
                     var column = api.column( i );
@@ -141,13 +174,13 @@
         $('#button').click( function () {
             var rowData1 = table.rows({ selected: true }).data();
             var count = table.rows({selected:true}).count();
-
+            alert("1")
             $.ajax({
-                url: '{% url "phone:data_phone_input"%}',
+                url: '{% url "phone:phone_input"%}',
                 type: 'POST',
                 data: {'count':count},
                 success: function(e){
-
+                     alert("he")
                 }
 
             });
