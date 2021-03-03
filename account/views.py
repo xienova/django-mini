@@ -17,7 +17,8 @@ def index(request):
     :return:
     '''
     if request.method == "GET":
-        return redirect(reverse('account:login'))  # 跳转到登录界面
+        # return redirect(reverse('account:login'))  # 跳转到登录界面
+        return render(request,'base_adminlte2.html')
 
 
 def dep_list(request):
